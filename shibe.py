@@ -9,7 +9,6 @@ import sys
 sub_name 		= "dogemarket"
 sub_name_scam	= "dogecoinscamwatch"
 
-#sub_name 		= "sourced"
 sub_name		= "fricktest"
 sub_name_scam	= "fricktest2"
 
@@ -120,15 +119,12 @@ def ProcessComments(r):
 			comm_author = str(comment.author)
 						
 			#FIND ALL USERNAMES IN THE PARENT COMMENT
-			#all_matches = re.findall(r'\/u\/\b([^\s]+)\b', comm_parent_body, re.I | re.U)
 			all_matches = re.findall(r'\/u\/([^\s]+)', comm_parent_body, re.I | re.U)
 			
 			#LIST ALL MATCHES
 			if debug_mode:
 			
 				print("\t\tFound %s username matches in comment: %s\n" %(len(all_matches),all_matches))
-				#for i, x in enumerate(all_matches):
-				#	print("\t%s - %s" %(i, x))
 				
 			#SECOND USERNAME
 			if len(all_matches) == 0:
@@ -424,16 +420,6 @@ def ProcessComments(r):
 			
 			cur.execute(strSQL)
 			sql.commit()
-
-			#UPVOTING COMMENTS			
-			#if debug_mode:
-			#	print("\t\tUpvoting comments...")
-			
-			#try:
-			#	comment.upvote()
-			#	comment.parent().upvote()
-			#except:
-			#	print("\tERROR UPVOTING COMMENTS!")
 				
 			#REPLY WITH CONFIRMATION OF TRADE
 			if debug_mode:
@@ -506,7 +492,6 @@ def GetScamPosts(r):
 			print("\t%s - %s" %(post.author, post.title))
 				
 			#FIND THE USERNAME IN THE TITLE
-			#all_matches = re.findall(r'\/u\/\b([^\s]+)\b', post_title, re.I | re.U)
 			all_matches = re.findall(r'\/u\/([^\s]+)', post_title, re.I | re.U)
 			
 			#LIST ALL MATCHES
@@ -603,25 +588,11 @@ def GetInbox(r):
 			#EMPTY THE VARIABLE
 			new_status = None
 			
-						#GET THE FIRST WORD AFTER KEYWORD - SPLIT BY SPACES
-						#subj_words = str(msg.subject)[len_kw1+1:].split(" ")						
-										
-						# #GET THE FIRST WORD FROM THE SPLIT LIST
-						# new_status = subj_words[0].upper()
-						
-						# #IF THE RESULT IS IN THE ACCEPTED USER STATUSES, THEN UPDATE THE TABLE WITH THAT DATA
-						# if not new_status in kw_status_list:
-							# print("\tREPLY ({0}) NOT RECOGNISED!".format(new_status))
-							# continue
-						# else:
-							# print("\tReturned: {0}".format(new_status))
-
 			new_status = str(msg.subject).replace("{0} ".format(kw_userstatus), "")
 							
 			all_matches = None
 			
 			#GET THE USERNAME FROM THE START OF THE BODY
-			#all_matches = re.findall(r'^\/u\/\b([^\s]+)\b', msg.body, re.I | re.U)
 			all_matches = re.findall(r'^\/u\/([^\s]+)', msg.body, re.I | re.U)			
 
 			if all_matches is None:
@@ -651,7 +622,6 @@ def GetInbox(r):
 			
 			#GET THE CURRENT CSS - otherwise a dictionary containing the keys flair_css_class, flair_text, and user.
 			user_css = list(r.subreddit(sub_name).flair(redditor=user_to_update))[0]
-			#r.flair(sub_name,user_to_update)[0]
 			
 			#TAKE WHAT YOU NEED
 			cur_flair_class = user_css["flair_css_class"]
@@ -706,10 +676,7 @@ def GetInbox(r):
 				
 def GetUserStatus(r, uName):
 
-	#GET THE DATA, SORTED BY DATA, DESCENDING
-	#uName = "SpamCheck_Bot"
-	#uName = "epicmindwarp"
-	
+	#GET THE DATA, SORTED BY DATA, DESCENDING	
 	print("\n\tGetting user status for {0}".format(uName))
 
 	#IF THE USER IS A MODERATOR, THEN RETURN MODERATOR
@@ -776,11 +743,7 @@ except:
 	sys.exit()
 
 #ONLY LOG IN ON NON-TEST MODE
-#if not test_mode:
 r = BotLogin()
-#else:
-#	print("TEST MODE: %s" %test_mode)
-#	r = ""
 
 moderators = []
 GetModerators(r)
