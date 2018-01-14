@@ -12,6 +12,7 @@ sub_name_scam	= "dogecoinscamwatch"
 sub_name		= "fricktest"
 sub_name_scam	= "fricktest2"
 
+post_id			= "7kfn74"
 comment_limit 	= 50
 post_limit		= 50
 sleep_seconds	= 60
@@ -65,6 +66,10 @@ def ProcessComments(r):
 		print("#"*25)
 		
 	for comment in comments:
+	
+		#ONLY PROCESS FROM SPECIFIC POST
+		if not comment.submission.id == post_id:
+			continue
 
 		#IF THE COMMENT BEGGINS WITH THE TRADE TRIGGER
 		if str(comment.body[0:10]).upper() == kw_trade:
@@ -535,7 +540,7 @@ ____
 			print("\tSending modmail notification...")
 			#SEND MODMAIL AFTER GETTING A NEW POST
 			try:
-				#pass
+				pass
 				r.subreddit(sub_name).message(mm_subject,mm_message)
 			except:
 				print("\tERROR SENDING MODMAIL!")
